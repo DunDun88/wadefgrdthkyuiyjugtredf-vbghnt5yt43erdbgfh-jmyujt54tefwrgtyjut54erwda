@@ -19,15 +19,15 @@ do
   then
     teams+="${columns[2]}"
     $PSQL "INSERT INTO teams(name) VALUES('${columns[2]}')"
-    winner_id=$($PSQL "SELECT team_id FROM teams WHERE name='${columns[2]}'")
   fi
 
   if [[ ! "${teams[*]}" =~ "${columns[3]}" ]]
   then 
     teams+="${columns[3]}"
     $PSQL "INSERT INTO teams(name) VALUES('${columns[3]}')"
-    opponent_id=$($PSQL "SELECT team_id FROM teams WHERE name='${columns[3]}'")
   fi
-
+  
+  winner_id=$($PSQL "SELECT team_id FROM teams WHERE name='${columns[2]}'")
+  opponent_id=$($PSQL "SELECT team_id FROM teams WHERE name='${columns[3]}'")
   $PSQL "INSERT INTO games(year, round, winner_id, opponent_id, winner_goals, opponent_goals) VALUES('${columns[0]}', '${columns[1]}', '${winner_id}', '${opponent_id}', '${columns[4]}', '${columns[5]}')"
 done
